@@ -26,6 +26,8 @@ def sigmoid(x):
 def g(x, y):
     return y(1-y)(x-y)
 
+def sum_calculate(x, y, z)
+    
 def BP(data, label, hidden_number, step, model = 'normal'):
     output_number = label.shape[1]
     input_number = data.shape[1]
@@ -39,6 +41,7 @@ def BP(data, label, hidden_number, step, model = 'normal'):
         alpha = np.zeros((data.shape[0], hidden_number))
         error = np.zeros((data.shape[0], 1))
         beta = np.zeros((data.shape[0], output_number))
+        delta_w = np.zeros((data.shape[0], output_number, hidden_number))
         for i in range(data.shape[0]):
             # input-hidden layer parameters
             for j in range(hidden_number):
@@ -50,11 +53,19 @@ def BP(data, label, hidden_number, step, model = 'normal'):
                 beta[i, m] = sigmoid(output_x)
             error[i] = 0.5 * np.sum((beta[i] - label)**2)
             #更新参数
-            for j in range():
-                delta_w[i, j] = step * g(label[i], beta[i][j]) * alpha[i, j]
-            
+            e[h] = np.zeros(hidden_number, 1)
+            for h in range(hidden_number):
+                w_g = 0
+                for j in range(output_number):
+                    w_g += g(label[i], beta[i, j]) * hidden_output_para[i, j, h]
+                e[h] = w_g
+            for j in range(output_number):
+                for h in range(hidden_number):
+                    delta_w[i, j, h] = step * g(label[i], beta[i][j]) * alpha[i, h]
+                    delta_theta[i, j] = - step * g(label[i], beta[i][j])
+                    delta_v[k, h] = step * e[h] * data[i, k]  
             accumulated_error = np.sum(error)
-            print(error)
+            print(error) 
             
             
     
