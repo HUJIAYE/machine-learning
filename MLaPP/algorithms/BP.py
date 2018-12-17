@@ -12,7 +12,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 #将原始数据标签做成字典
 def iris_type(s):
-    it = {b'Iris-setosa': 0, b'Iris-versicolor': 1, b'Iris-virginica': 2}
+    it = {b'Iris-setosa': 0, b'Iris-versicolor': 0.5, b'Iris-virginica': 1}
     return it[s]
 
 #读取数据
@@ -39,7 +39,7 @@ def g_f(y_truth, y_pre):
     
 def BP(data, label, hidden_number, step, model = 'normal'):
     
-    label = [int(i) for i in label]
+    label = [float(i) for i in label]
     output_number = len(label)
     input_number = data.shape[1]
     # 初始化参数  
@@ -75,6 +75,7 @@ def BP(data, label, hidden_number, step, model = 'normal'):
                     output_x += alpha[i,k] * w[i, m, k]
                 output_x = output_x - theta[i, m]
                 beta[i, m] = sigmoid(output_x)
+                
             error[i] = 0.5 * np.sum((beta[i] - label)**2)
             #标准梯度
             e = np.zeros((hidden_number, 1))
@@ -82,6 +83,7 @@ def BP(data, label, hidden_number, step, model = 'normal'):
                 w_g = 0
                 for j in range(output_number):
                     w_g += g_f(label[i], beta[i, j]) * w[i, j, h]
+                w_g = w_g * alpha[i,h]*(1-alpha[i,h])
                 e[h] = w_g
             for j in range(output_number):
                 for h in range(hidden_number):
@@ -97,15 +99,18 @@ def BP(data, label, hidden_number, step, model = 'normal'):
             w = w + delta_w
             #计算平均误差
             instan_error = np.mean(error)
-            accumulated_error.append(instan_error)
-        max_epoch -= 1
-        if max_epoch % 100 == 0:
-            print(instan_error)
             
+        max_epoch -= 1
+        
+        if max_epoch % 10 == 0:
+            accumulated_error.append(instan_error)
+            print(instan_error)
+    plt.plot(accumulated_error)
+    plt.show()
             
     
    
 if __name__ == '__main__':
     x_train, x_test, y_train, y_test = load_data('C:\\Users\\Jiaye\\Desktop\\machine-learning\\MLaPP\\dataset\\iris.data')
    #x_train.shape, x_test.shape, y_train.shape, y_test.shape： (90, 4) (60, 4) (90, 1) (60, 1)
-    BP(x_train, y_train, 10, 10)
+    BP(x_train, y_train, 6, 0.6)
