@@ -113,4 +113,4 @@ def BP(data, label, hidden_number, step, model = 'normal'):
 if __name__ == '__main__':
     x_train, x_test, y_train, y_test = load_data('C:\\Users\\Jiaye\\Desktop\\machine-learning\\MLaPP\\dataset\\iris.data')
    #x_train.shape, x_test.shape, y_train.shape, y_test.shape： (90, 4) (60, 4) (90, 1) (60, 1)
-    BP(x_train, y_train, 6, 0.6)
+    BP(x_train, y_train, 10, 0.6)
